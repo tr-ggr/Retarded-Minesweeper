@@ -87,7 +87,7 @@ $(document).ready(function () {
       }
     }
 
-    while (mines.length < 20) {
+    while (mines.length < 10) {
       let row = Math.floor(Math.random() * 9) + 1;
       let col = Math.floor(Math.random() * 9) + 1;
       var bombTile = `${row}-${col}`;
