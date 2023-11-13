@@ -18,6 +18,7 @@ $(document).ready(function () {
       return;
     }
     revealedTiles.push(`${tilex}-${tiley}`);
+
     console.log("MAO NING GI CLICK NIMO NA ID: " + tilex + "-" + tiley);
     console.log(numbered.includes(`${tilex}-${tiley}`));
 
@@ -74,21 +75,28 @@ $(document).ready(function () {
   //   mines[i] = row + "-" + col;
   // }
 
-  function generate(x, y) {
-    for (let i = 0; i < 20; i++) {
+  function generateMines(excludeX, excludeY) {
+    var excludedTiles = [];
+
+    for (let x = -1; x <= 1; x++) {
+      for (let y = -1; y <= 1; y++) {
+        var tilexFinal = excludeX + x;
+        var tileyFinal = excludeY + y;
+        excludedTiles.push(`${tilexFinal}-${tileyFinal}`);
+      }
+    }
+
+    while (mines.length < 20) {
       let row = Math.floor(Math.random() * 9) + 1;
       let col = Math.floor(Math.random() * 9) + 1;
+      var bombTile = `${row}-${col}`;
 
-      if (row === x) row = row + 4;
-      if (col === y) col = col + 4;
-
-      console.log(row + "-" + col);
-
-      mines[i] = row + "-" + col;
+      if (!excludedTiles.includes(bombTile) && !mines.includes(bombTile)) {
+        mines.push(bombTile);
+      }
     }
 
     for (let id of mines) {
-      console.log("mao ning id: " + id);
       $(`#${id}`).addClass("bomb");
     }
 
@@ -190,23 +198,23 @@ $(document).ready(function () {
     }
   }
 
+  function handleFirstClick(x, y) {
+    generateMines(x, y);
+    revealTiles(x, y);
+    firstStart = false;
+  }
+
   //buttons
   $(".gridclass").on("click", function (e) {
     var string = e.target.id;
     var x = parseInt(string.charAt(0));
     var y = parseInt(string.charAt(2));
 
-    if (firstStart == true) {
-      generate(x, y);
-      revealTiles(x, y);
+    if (firstStart) {
+      handleFirstClick(x, y);
     } else {
-      console.log(e);
-
-      // console.log(string.charAt(0));
       revealTiles(x, y);
     }
-
-    firstStart = false;
   });
 
   $(".gridclass").on("contextmenu", function (e) {
