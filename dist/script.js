@@ -25,6 +25,7 @@ $(document).ready(function () {
     if (mines.includes(`${tilex}-${tiley}`)) {
       //   $("body").html(" ");
       alert("LOSE!");
+      location.reload();
       return;
     } else if (numbered.includes(`${tilex}-${tiley}`)) {
       //   alert("NUMBERED");
